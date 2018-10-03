@@ -28,6 +28,7 @@
  */
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -55,6 +56,12 @@ public class HardwareShamer
     public DcMotor  leftDrive2  = null;
     public DcMotor  rightDrive1  = null;
     public DcMotor  rightDrive2 = null;
+    public DcMotor collectionMotor = null;
+
+    public Servo marker = null;
+
+
+
 
 
 
@@ -78,6 +85,14 @@ public class HardwareShamer
         leftDrive2 =  hwMap.get(DcMotor.class, "left_drive2");
         rightDrive1 = hwMap.get(DcMotor.class, "right_drive1");
         rightDrive2 = hwMap.get(DcMotor.class, "right_drive2");
+        collectionMotor = hwMap.get(DcMotor.class, "collection_Motor");
+        marker = hwMap.get(Servo.class, "marker");
+
+        leftDrive1.setDirection(DcMotor.Direction.FORWARD);
+        leftDrive2.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive1.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive2.setDirection(DcMotor.Direction.REVERSE);
+
 
 
 
@@ -86,8 +101,34 @@ public class HardwareShamer
         leftDrive2.setPower(0);
         rightDrive1.setPower(0);
         rightDrive2.setPower(0);
+        collectionMotor.setPower(0);
+
+         double markerStart = 0;
+         double markerOpen = 1;
+
+
+
 
 
     }
- }
+
+
+    public void leftDrive(double power){
+        leftDrive1.setPower(power);
+        leftDrive2.setPower(power);
+    }
+
+    public void rightDrive(double power){
+        rightDrive1.setPower(power);
+        rightDrive2.setPower(power);
+
+    }
+
+    public void drive(double power){
+        rightDrive(power);
+        leftDrive(power);
+    }
+
+
+}
 
