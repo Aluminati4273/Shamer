@@ -33,6 +33,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import static android.os.SystemClock.sleep;
+
 /**
  * This is NOT an opmode.
  *
@@ -51,6 +53,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 public class HardwareShamer
 {
+
+    private ElapsedTime runtime = new ElapsedTime();
+
+
+
     /* Public OpMode members. */
     public DcMotor  leftDrive1   = null;
     public DcMotor  leftDrive2  = null;
@@ -58,7 +65,14 @@ public class HardwareShamer
     public DcMotor  rightDrive2 = null;
     public DcMotor collectionMotor = null;
 
-    public Servo marker = null;
+    public Servo marker1 = null;
+    public Servo marker2 = null;
+
+    public double marker1Start = 0;
+    public double marker1Open = 1;
+
+    public double marker2start = 0;
+    public double marker2open = 1;
 
 
 
@@ -77,17 +91,24 @@ public class HardwareShamer
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
+
         // Save reference to Hardware map
         hwMap = ahwMap;
 
-        // Define and Initialize Motors
+        // Define and Initialize Drive Motors
         leftDrive1  = hwMap.get(DcMotor.class, "left_drive1");
         leftDrive2 =  hwMap.get(DcMotor.class, "left_drive2");
         rightDrive1 = hwMap.get(DcMotor.class, "right_drive1");
         rightDrive2 = hwMap.get(DcMotor.class, "right_drive2");
-        collectionMotor = hwMap.get(DcMotor.class, "collection_Motor");
-        marker = hwMap.get(Servo.class, "marker");
 
+        // define and initialize collector motor
+        collectionMotor = hwMap.get(DcMotor.class, "collection_Motor");
+
+        //initialize servos
+        marker1 = hwMap.get(Servo.class, "marker_extend");
+        marker2 = hwMap.get(Servo.class, "marker_drop");
+
+        //set direction of drive motors
         leftDrive1.setDirection(DcMotor.Direction.FORWARD);
         leftDrive2.setDirection(DcMotor.Direction.FORWARD);
         rightDrive1.setDirection(DcMotor.Direction.REVERSE);
@@ -95,20 +116,18 @@ public class HardwareShamer
 
 
 
-
-        // Set all motors to zero power
+        // Set all drive motors to zero power
         leftDrive1.setPower(0);
         leftDrive2.setPower(0);
         rightDrive1.setPower(0);
         rightDrive2.setPower(0);
+
+        // set collection motor to zero
         collectionMotor.setPower(0);
 
-         double markerStart = 0;
-         double markerOpen = 1;
-
-
-
-
+        // set team marker servo position
+        marker1.setPosition(marker1Start);
+        marker2.setPosition(marker2start);
 
     }
 
@@ -127,6 +146,16 @@ public class HardwareShamer
     public void drive(double power){
         rightDrive(power);
         leftDrive(power);
+    }
+
+
+    public void dropMarker(){
+        marker1.setPosition(marker1Open);
+
+        sleep(250);
+
+        marker2.setPosition(marker2open);
+
     }
 
 
