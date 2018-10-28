@@ -50,7 +50,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 @TeleOp(name="Shamer: Teleop POV", group="Shamer")
 
-public class ShamerTeleopPOV_Linear extends LinearOpMode {
+public class ShamerTeleop extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareShamer robot           = new HardwareShamer();   // Use a Pushbot's hardware
@@ -87,14 +87,37 @@ public class ShamerTeleopPOV_Linear extends LinearOpMode {
             // Combine drive and turn for blended motion.
 
 
-            // Normalize the values so neither exceed +/- 1.0
-            max = Math.max(Math.abs(left), Math.abs(right));
-            if (max > 0.1)
-            {
+            // power left motors if absolute value of the joystick is greater than the threshold value
+            if((Math.abs(left)) > robot.threshold){
                 robot.leftDrive(left);
+            }
+
+            // power right motors if absolute value of the joystick is greater than the threshold value
+            if((Math.abs(right)) > robot.threshold){
                 robot.rightDrive(right);
             }
 
+            //control for the lift arm
+
+
+
+            // deploy the collection system with gamepad 2 button a
+            if(gamepad2.a){
+                robot.deployCollector(1.0);
+            }
+
+            //retract the collection system with gamepad 2 button b
+            if(gamepad2.b){
+                robot.retractCollector(-1.0);
+            }
+
+            //control for the collection system collection motor (halls of sadness)
+
+
+            //control for the collection system sorter
+
+
+            //control for the mineral launching system
 
 
 

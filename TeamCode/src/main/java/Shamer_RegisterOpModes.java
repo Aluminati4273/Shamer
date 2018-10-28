@@ -65,7 +65,7 @@ public class Shamer_RegisterOpModes
     @OpModeRegistrar
     public static void registerMyOpModes(OpModeManager manager) {
 
-      manager.register("Teleop POV", ShamerTeleopPOV_Linear.class);
+      manager.register("Teleop POV", ShamerTeleop.class);
       // manager.register("Teleop Tank",            PushbotTeleopTank_Iterative.class);
       // manager.register("Auto Drive Gyro",        PushbotAutoDriveByGyro_Linear.class);
       // manager.register("Auto Drive Encoder",     PushbotAutoDriveByEncoder_Linear.class);

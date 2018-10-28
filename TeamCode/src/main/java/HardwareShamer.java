@@ -39,12 +39,13 @@ import static android.os.SystemClock.sleep;
  * This is NOT an opmode.
  *
  * This class can be used to define all the specific hardware for a single robot.
- * In this case that robot is a Pushbot.
- * See SHAMER_TeleOp and others classes starting with "Pushbot" for usage examples.
+ * In this case that robot is a Shamer.
  *
  * This hardware class assumes the following device names have been configured on the robot:
  * Note:  All names are lower case and some have single spaces between words.
  *
+ *
+ * RYAN THIS NEEDS UPDATED!!! RYAN THIS NEEDS UPDATED!!! RYAN THIS NEEDS UPDATED!!! RYAN THIS NEEDS UPDATED!!!
  * Motor channel:  Left  drive motor:        "left_drive"
  * Motor channel:  Right drive motor:        "right_drive"
  * Motor channel:  Manipulator drive motor:  "left_arm"
@@ -59,24 +60,32 @@ public class HardwareShamer
 
 
     /* Public OpMode members. */
-    public DcMotor  leftDrive1   = null;
-    public DcMotor  leftDrive2  = null;
-    public DcMotor  rightDrive1  = null;
-    public DcMotor  rightDrive2 = null;
+
+    //nameing drive system motors
+    public DcMotor  leftDriveFront   = null;
+    public DcMotor  leftDriveBack  = null;
+    public DcMotor  rightDriveFront  = null;
+    public DcMotor  rightDriveBack = null;
+
+
+    //naming non-drive system motors
     public DcMotor collectionMotor = null;
+    public DcMotor collectorDeployMotor = null;
 
-    public Servo marker1 = null;
-    public Servo marker2 = null;
+    //naming the team marker servos
+    public Servo markerArm = null;
+    public Servo markerDrop = null;
 
-    public double marker1Start = 0;
-    public double marker1Open = 1;
+    // Store and Release positions for the team marker Arm servo
+    public double markerArmStore = 0;
+    public double markerArmRelease = 1;
 
-    public double marker2start = 0;
-    public double marker2open = 1;
+    // Store and Release positions for the team marker Drop servo
+    public double markerDropStore = 0;
+    public double markerDropRelease = 1;
 
-
-
-
+    //threshold value for joysticks
+    public double threshold = 0.1;
 
 
 
@@ -96,67 +105,79 @@ public class HardwareShamer
         hwMap = ahwMap;
 
         // Define and Initialize Drive Motors
-        leftDrive1  = hwMap.get(DcMotor.class, "left_drive1");
-        leftDrive2 =  hwMap.get(DcMotor.class, "left_drive2");
-        rightDrive1 = hwMap.get(DcMotor.class, "right_drive1");
-        rightDrive2 = hwMap.get(DcMotor.class, "right_drive2");
+        leftDriveFront  = hwMap.get(DcMotor.class, "left_drive1");
+        leftDriveBack =  hwMap.get(DcMotor.class, "left_drive2");
+        rightDriveFront = hwMap.get(DcMotor.class, "right_drive1");
+        rightDriveBack = hwMap.get(DcMotor.class, "right_drive2");
 
         // define and initialize collector motor
         collectionMotor = hwMap.get(DcMotor.class, "collection_Motor");
+        collectorDeployMotor = hwMap.get(DcMotor.class,"collector_deploy_motor");
 
-        //initialize servos
-        marker1 = hwMap.get(Servo.class, "marker_extend");
-        marker2 = hwMap.get(Servo.class, "marker_drop");
+        //initialize servos for the marker
+        markerArm = hwMap.get(Servo.class, "marker_extend");
+        markerDrop = hwMap.get(Servo.class, "marker_drop");
 
         //set direction of drive motors
-        leftDrive1.setDirection(DcMotor.Direction.FORWARD);
-        leftDrive2.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive1.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive2.setDirection(DcMotor.Direction.REVERSE);
-
+        leftDriveFront.setDirection(DcMotor.Direction.FORWARD);
+        leftDriveBack.setDirection(DcMotor.Direction.FORWARD);
+        rightDriveFront.setDirection(DcMotor.Direction.REVERSE);
+        rightDriveBack.setDirection(DcMotor.Direction.REVERSE);
 
 
         // Set all drive motors to zero power
-        leftDrive1.setPower(0);
-        leftDrive2.setPower(0);
-        rightDrive1.setPower(0);
-        rightDrive2.setPower(0);
+        leftDriveFront.setPower(0);
+        leftDriveBack.setPower(0);
+        rightDriveFront.setPower(0);
+        rightDriveBack.setPower(0);
 
-        // set collection motor to zero
+        // set initial collector motors power to zero
         collectionMotor.setPower(0);
+        collectorDeployMotor.setPower(0);
 
-        // set team marker servo position
-        marker1.setPosition(marker1Start);
-        marker2.setPosition(marker2start);
+        // set team marker servo starting positions (store)
+        markerArm.setPosition(markerArmStore);
+        markerDrop.setPosition(markerDropStore);
 
     }
 
-
+    //function to control the right side motors of the robot
     public void leftDrive(double power){
-        leftDrive1.setPower(power);
-        leftDrive2.setPower(power);
+        leftDriveFront.setPower(power);
+        leftDriveBack.setPower(power);
     }
 
+    //function to control the right side motors of the robot
     public void rightDrive(double power){
-        rightDrive1.setPower(power);
-        rightDrive2.setPower(power);
-
+        rightDriveFront.setPower(power);
+        rightDriveBack.setPower(power);
     }
 
-    public void drive(double power){
-        rightDrive(power);
-        leftDrive(power);
+    //deploy the collector using collectorDeployMotor
+    public void deployCollector(double power){
+        collectorDeployMotor.setPower(power);
+    }
+
+    //retract the collector using collectorDeployMotor
+    public void retractCollector(double power){
+        collectorDeployMotor.setPower(power);
     }
 
 
-    public void dropMarker(){
-        marker1.setPosition(marker1Open);
-
+    // moves the marker into the release position and then releases the marker
+    public void releaseMarker(){
+        markerArm.setPosition(markerArmRelease);
         sleep(250);
-
-        marker2.setPosition(marker2open);
-
+        markerDrop.setPosition(markerDropRelease);
     }
+
+    // moves both marker servos into the stored position (ma
+    public void storeMarker (){
+        markerDrop.setPosition(markerDropStore);
+        sleep(500);
+        markerArm.setPosition(markerArmStore);
+    }
+
 
 
 }
