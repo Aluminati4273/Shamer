@@ -78,13 +78,9 @@ public class ShamerTeleop extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
-            // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
-            // This way it's also easy to just drive straight, or just turn.
+            // sets left and right values to gamepad1 joysticks
             left = gamepad1.left_stick_y;
             right = gamepad1.right_stick_y;
-
-            // Combine drive and turn for blended motion.
 
 
             // power left motors if absolute value of the joystick is greater than the threshold value
@@ -97,8 +93,15 @@ public class ShamerTeleop extends LinearOpMode {
                 robot.rightDrive(right);
             }
 
-            //control for the lift arm
+            //extend lift arm
+            if(gamepad1.left_trigger > robot.threshold){
+                robot.extendLift(gamepad1.left_trigger);
+            }
 
+            //retract lift arm
+            if(gamepad1.right_trigger > robot.threshold){
+                robot.extendLift(gamepad1.right_trigger);
+            }
 
 
             // deploy the collection system with gamepad 2 button a

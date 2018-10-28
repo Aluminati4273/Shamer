@@ -71,6 +71,7 @@ public class HardwareShamer
     //naming non-drive system motors
     public DcMotor collectionMotor = null;
     public DcMotor collectorDeployMotor = null;
+    public DcMotor liftMotor = null;
 
     //naming the team marker servos
     public Servo markerArm = null;
@@ -153,6 +154,16 @@ public class HardwareShamer
         rightDriveBack.setPower(power);
     }
 
+    //extend lift
+    public void extendLift(double power){
+        liftMotor.setPower(power);
+    }
+
+    //retract lift
+    public void retractLift(double power){
+        liftMotor.setPower(power);
+    }
+
     //deploy the collector using collectorDeployMotor
     public void deployCollector(double power){
         collectorDeployMotor.setPower(power);
@@ -162,7 +173,6 @@ public class HardwareShamer
     public void retractCollector(double power){
         collectorDeployMotor.setPower(power);
     }
-
 
     // moves the marker into the release position and then releases the marker
     public void releaseMarker(){
