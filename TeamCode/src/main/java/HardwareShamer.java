@@ -142,19 +142,24 @@ public class HardwareShamer
 
     }
 
+
+
+    //*********************** DRIVETRAIN FUNCTIONALLITY ******************************//
+
     //function to control the right side motors of the robot
     public void leftDrive(double power){
-        leftDriveFront.setPower(power);
         leftDriveBack.setPower(power);
     }
 
     //function to control the right side motors of the robot
     public void rightDrive(double power){
-        rightDriveFront.setPower(power);
         rightDriveBack.setPower(power);
     }
 
-    //extend lift
+
+
+    //*********************** LIFT FUNCTIONALLITY ******************************//
+        //extend lift
     public void extendLift(double power){
         liftMotor.setPower(power);
     }
@@ -164,6 +169,9 @@ public class HardwareShamer
         liftMotor.setPower(power);
     }
 
+
+
+    //********************** COLLECTOR FUNCTIONALLITY **************************//
     //deploy the collector using collectorDeployMotor
     public void deployCollector(double power){
         collectorDeployMotor.setPower(power);
@@ -174,6 +182,18 @@ public class HardwareShamer
         collectorDeployMotor.setPower(power);
     }
 
+    //set collectionMotor to collect minerals
+    public void collectorIn (double power){
+        collectionMotor.setPower(1.0);
+    }
+
+    //set collectionMotor to push out minerals
+    public void collectorOut (double power){
+        collectionMotor.setPower(-1.0);
+    }
+
+
+    //********************** MARKER FUNCTIONALLITY *****************************//
     // moves the marker into the release position and then releases the marker
     public void releaseMarker(){
         markerArm.setPosition(markerArmRelease);

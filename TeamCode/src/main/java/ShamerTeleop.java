@@ -59,9 +59,9 @@ public class ShamerTeleop extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
         double left;
         double right;
-        double max;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -78,6 +78,9 @@ public class ShamerTeleop extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+
+            //****************** GAMEPAD 1 CONTROLS ********************//
+
             // sets left and right values to gamepad1 joysticks
             left = gamepad1.left_stick_y;
             right = gamepad1.right_stick_y;
@@ -93,6 +96,9 @@ public class ShamerTeleop extends LinearOpMode {
                 robot.rightDrive(right);
             }
 
+
+            // Set's the control of the lift to GAMEPAD 1, left and right trigger
+
             //extend lift arm
             if(gamepad1.left_trigger > robot.threshold){
                 robot.extendLift(gamepad1.left_trigger);
@@ -100,9 +106,14 @@ public class ShamerTeleop extends LinearOpMode {
 
             //retract lift arm
             if(gamepad1.right_trigger > robot.threshold){
-                robot.extendLift(gamepad1.right_trigger);
+                robot.retractLift(gamepad1.right_trigger);
             }
 
+
+
+
+
+            //****************** GAMEPAD 2 CONTROLS ********************//
 
             // deploy the collection system with gamepad 2 button a
             if(gamepad2.a){
@@ -114,10 +125,18 @@ public class ShamerTeleop extends LinearOpMode {
                 robot.retractCollector(-1.0);
             }
 
-            //control for the collection system collection motor (halls of sadness)
+            //control for the collection system MINERALS IN - collection motor (halls of sadness)
+            if(gamepad1.right_bumper){
+                robot.collectorIn(1.0);
+            }
 
+            //control for the collection system MINERALS OUT - collection motor (halls of sadness)
+            if(gamepad1.left_bumper){
+                robot.collectorOut(-1.0);
+            }
 
             //control for the collection system sorter
+
 
 
             //control for the mineral launching system
